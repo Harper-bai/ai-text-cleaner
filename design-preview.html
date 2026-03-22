@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Word Cleaner Demo Preview</title>
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f5f1e8;
+        --surface: #fcfbf7;
+        --surface-strong: #f1eadc;
+        --text: #1e1e1a;
+        --text-soft: #6f6a5f;
+        --text-faint: #a59a87;
+        --border: #d9d2c3;
+        --accent: #c96b3b;
+        --accent-strong: #b65f31;
+        --success: #7a9462;
+        --secondary: #b8c4b0;
+        --info: #6a7e95;
+        --shadow: 0 18px 40px rgba(48, 38, 24, 0.08);
+        --radius-sm: 6px;
+        --radius-md: 10px;
+        --radius-lg: 16px;
+        --radius-xl: 24px;
+        --space-1: 4px;
+        --space-2: 8px;
+        --space-3: 12px;
+        --space-4: 16px;
+        --space-5: 24px;
+        --space-6: 32px;
+        --space-7: 48px;
+        --space-8: 64px;
+      }
+
+      body.dark {
+        color-scheme: dark;
+        --bg: #1d1915;
+        --surface: #26211c;
+        --surface-strong: #312920;
+        --text: #f5f1e8;
+        --text-soft: #c4b8a6;
+        --text-faint: #8f8372;
+        --border: #473c31;
+        --accent: #c47b53;
+        --accent-strong: #d7926d;
+        --success: #8ea873;
+        --secondary: #738268;
+        --info: #91a4ba;
+        --shadow: 0 18px 40px rgba(0, 0, 0, 0.26);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Instrument Sans", sans-serif;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 24%),
+          repeating-linear-gradient(
+            0deg,
+            transparent 0,
+            transparent 39px,
+            rgba(111, 106, 95, 0.04) 39px,
+            rgba(111, 106, 95, 0.04) 40px
+          ),
+          var(--bg);
+        color: var(--text);
+        transition: background-color 180ms ease, color 180ms ease;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .page {
+        width: min(1180px, calc(100vw - 40px));
+        margin: 0 auto;
+        padding: 24px 0 72px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 0 20px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .brand-text strong {
+        display: block;
+        font-size: 15px;
+      }
+
+      .brand-text span,
+      .nav a,
+      .meta,
+      .chip,
+      .eyebrow,
+      .small {
+        color: var(--text-soft);
+      }
+
+      .nav {
+        display: flex;
+        gap: 20px;
+        font-size: 14px;
+      }
+
+      .toggle {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        border-radius: 999px;
+        padding: 9px 14px;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 32px;
+        align-items: end;
+        padding: 40px 0 32px;
+      }
+
+      .eyebrow {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 14px;
+      }
+
+      h1 {
+        margin: 0 0 18px;
+        font-family: "Fraunces", serif;
+        font-size: clamp(46px, 7vw, 72px);
+        line-height: 0.98;
+        letter-spacing: -0.03em;
+        max-width: 11ch;
+      }
+
+      .lede {
+        margin: 0 0 22px;
+        max-width: 36rem;
+        font-size: 18px;
+        line-height: 1.6;
+        color: var(--text-soft);
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        font-weight: 600;
+      }
+
+      .button.primary {
+        background: var(--accent);
+        color: #1f120b;
+        box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.08);
+      }
+
+      .button.ghost {
+        background: var(--surface);
+        border-color: var(--border);
+        color: var(--text);
+      }
+
+      .specimen {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .split-card {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 14px;
+      }
+
+      .mini-pane {
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: var(--surface-strong);
+        padding: 14px;
+        min-height: 190px;
+      }
+
+      .mini-pane strong,
+      .panel-head strong,
+      .section-head strong {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 13px;
+      }
+
+      .mini-pane p,
+      .sample-card p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--text-soft);
+      }
+
+      .strike {
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+      }
+
+      .workspace {
+        margin-top: 12px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .process {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.25);
+        font-size: 12px;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--success);
+      }
+
+      .panes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .panel {
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+        background: var(--surface-strong);
+        min-height: 440px;
+      }
+
+      .panel.output {
+        background: linear-gradient(180deg, rgba(201, 107, 59, 0.08), transparent 42%), var(--surface);
+      }
+
+      .panel-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 18px 18px 14px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .panel-head span {
+        display: block;
+        font-size: 13px;
+        color: var(--text-soft);
+      }
+
+      .panel-copy {
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        font-size: 12px;
+        font-family: "IBM Plex Mono", monospace;
+      }
+
+      .panel-body {
+        padding: 18px;
+        font-size: 16px;
+        line-height: 1.8;
+      }
+
+      .panel-body p {
+        margin: 0 0 14px;
+      }
+
+      .panel-body p:last-child {
+        margin-bottom: 0;
+      }
+
+      .fix {
+        color: var(--accent-strong);
+        border-bottom: 1px dashed currentColor;
+      }
+
+      .value-strip {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .value-card,
+      .sample-card,
+      .palette-card,
+      .font-card,
+      .ui-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 18px;
+      }
+
+      .value-card h3,
+      .sample-card h3,
+      .palette-card h3,
+      .font-card h3,
+      .ui-card h3,
+      .section-title {
+        margin: 0 0 10px;
+        font-size: 16px;
+      }
+
+      .section {
+        margin-top: 24px;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: end;
+        margin-bottom: 14px;
+      }
+
+      .section-title {
+        font-family: "Fraunces", serif;
+        font-size: 30px;
+        letter-spacing: -0.02em;
+      }
+
+      .samples {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+      }
+
+      .palette-grid,
+      .font-grid,
+      .ui-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+      }
+
+      .swatch {
+        border-radius: 14px;
+        padding: 14px;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .swatch code,
+      .mono {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+      }
+
+      .font-card .display {
+        margin: 0 0 12px;
+        font-size: 34px;
+        line-height: 1.05;
+      }
+
+      .font-card .body {
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--text-soft);
+      }
+
+      .mock {
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        overflow: hidden;
+        background: var(--surface-strong);
+      }
+
+      .mock-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .mock-body {
+        padding: 16px;
+      }
+
+      .metric-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .metric {
+        padding: 14px;
+        border-radius: 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 20px;
+        margin-bottom: 6px;
+      }
+
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+
+      .table th,
+      .table td {
+        text-align: left;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .table th {
+        color: var(--text-soft);
+        font-weight: 500;
+      }
+
+      .footer {
+        margin-top: 28px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        color: var(--text-soft);
+        font-size: 14px;
+      }
+
+      @media (max-width: 980px) {
+        .hero,
+        .panes,
+        .value-strip,
+        .samples,
+        .palette-grid,
+        .font-grid,
+        .ui-grid,
+        .metric-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page {
+          width: min(100vw - 24px, 1180px);
+          padding-top: 16px;
+        }
+
+        .topbar,
+        .section-head,
+        .footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .nav {
+          flex-wrap: wrap;
+        }
+
+        h1 {
+          max-width: none;
+        }
+
+        .split-card {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">AW</div>
+          <div class="brand-text">
+            <strong>AI Word Cleaner</strong>
+            <span>Paste once. Copy clean.</span>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="#workspace">How it works</a>
+          <a href="#samples">Samples</a>
+          <a href="#system">Design system</a>
+        </nav>
+        <button class="toggle" id="themeToggle" type="button">Toggle dark</button>
+      </header>
+
+      <section class="hero">
+        <div>
+          <div class="eyebrow">Word-ready text, without Word cleanup</div>
+          <h1>把 AI 文字一键整理成可贴进 Word 的正文</h1>
+          <p class="lede">
+            自动去掉 Markdown、异常空格和多余空行，保留自然段落。首屏直接可用，不用学习任何格式规则。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#workspace">Try the workspace</a>
+            <a class="button ghost" href="#samples">See sample fixes</a>
+          </div>
+        </div>
+
+        <aside class="specimen">
+          <div class="eyebrow">Before / after specimen</div>
+          <strong>价值不靠解释，靠对比直接证明。</strong>
+          <div class="split-card">
+            <div class="mini-pane">
+              <strong>原文</strong>
+              <p>
+                <span class="strike">## 研究意义</span><br />
+                本文  将 从  用户 行为 的 角度， 分析 AI 工具 在论文 写作中的 使用情况。<br /><br />
+                - 第一，AI 可以 提高 效率。<br />
+                - 第二， 也 会 带来格式遗留。
+              </p>
+            </div>
+            <div class="mini-pane">
+              <strong>清洗后</strong>
+              <p>
+                研究意义<br /><br />
+                本文将从用户行为的角度，分析 AI 工具在论文写作中的使用情况。<br /><br />
+                第一，AI 可以提高效率。<br />
+                第二，也会带来格式遗留。
+              </p>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="workspace" id="workspace">
+        <div class="process">
+          <span class="chip"><span class="dot"></span> 自动清洗中</span>
+          <span class="chip mono">已处理 1,248 字</span>
+          <span class="chip">去 Markdown</span>
+          <span class="chip">修空格</span>
+          <span class="chip">合并空行</span>
+        </div>
+
+        <div class="panes">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <strong>粘贴 AI 原文</strong>
+                <span>支持中文论文正文、复制后的 Markdown 残留和异常断行。</span>
+              </div>
+            </div>
+            <div class="panel-body">
+              <p><span class="fix">### 研究背景</span></p>
+              <p>在当前 高校 写作 场景 中，越来越多 的 学生 会 使用 AI 生成 初稿。</p>
+              <p>但是，直接复制 后 的 文本 常常 会 带有 多余 空格、空行 以及 Markdown 格式。</p>
+              <p><span class="fix">-</span> 这些问题 会 影响 Word 中 的 阅读 体验。</p>
+              <p><span class="fix">-</span> 也 会 增加 手动 清理 的 时间 成本。</p>
+            </div>
+          </article>
+
+          <article class="panel output">
+            <div class="panel-head">
+              <div>
+                <strong>清洗后结果</strong>
+                <span>适合直接复制到 Word 正文，保留自然段落结构。</span>
+              </div>
+              <button class="panel-copy" type="button">已复制</button>
+            </div>
+            <div class="panel-body">
+              <p>研究背景</p>
+              <p>在当前高校写作场景中，越来越多的学生会使用 AI 生成初稿。</p>
+              <p>但是，直接复制后的文本常常会带有多余空格、空行以及 Markdown 格式。</p>
+              <p>这些问题会影响 Word 中的阅读体验。</p>
+              <p>也会增加手动清理的时间成本。</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="value-strip">
+          <div class="value-card">
+            <h3>一步完成</h3>
+            <p class="small">不做设置面板，不让用户研究规则。粘贴后立刻得到结果。</p>
+          </div>
+          <div class="value-card">
+            <h3>前后对比</h3>
+            <p class="small">结果可见，用户会更信任，也更适合你拿去做作品集展示。</p>
+          </div>
+          <div class="value-card">
+            <h3>本地处理感</h3>
+            <p class="small">轻量、安静、可信，不像重营销的 SEO 工具站。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="samples">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Sample cases</div>
+            <div class="section-title">真实脏格式，真实修复方式</div>
+          </div>
+          <div class="meta">用样例证明规则，而不是靠长段说明。</div>
+        </div>
+        <div class="samples">
+          <div class="sample-card">
+            <h3>Markdown 残留</h3>
+            <p>删除 `#`、列表符号、加粗标记，把机器生成的结构改成正常正文。</p>
+          </div>
+          <div class="sample-card">
+            <h3>中文空格异常</h3>
+            <p>修复标点前后和词语之间不自然的空格，让句子回到正常阅读状态。</p>
+          </div>
+          <div class="sample-card">
+            <h3>空行与断行</h3>
+            <p>合并多余空行，保留自然段落，不把正文压成一整块。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="system">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Design system</div>
+            <div class="section-title">Fonts, color, and UI direction</div>
+          </div>
+          <div class="meta">这部分是给你和未来实现代码的人看的。</div>
+        </div>
+
+        <div class="font-grid">
+          <div class="font-card">
+            <h3>Display</h3>
+            <p class="display" style="font-family: 'Fraunces', serif;">让标题像文字产品，而不是通用工具站。</p>
+            <p class="body">Fraunces 用在 hero 和大型标题，让这个 demo 有明确的编辑感和作品集辨识度。</p>
+          </div>
+          <div class="font-card">
+            <h3>Body & UI</h3>
+            <p class="display" style="font-family: 'Instrument Sans', sans-serif; font-size: 26px; line-height: 1.2;">Instrument Sans keeps the interface clean and contemporary.</p>
+            <p class="body">正文、按钮、说明文案都交给 Instrument Sans，读起来稳，不像默认模板。</p>
+          </div>
+          <div class="font-card">
+            <h3>Mono</h3>
+            <p class="display mono" style="font-size: 24px;">1,248 chars fixed<br />copy status: done</p>
+            <p class="body">IBM Plex Mono 只用于字符计数、状态标签和技术感元信息。</p>
+          </div>
+        </div>
+
+        <div class="section" style="margin-top: 14px;">
+          <div class="palette-grid">
+            <div class="palette-card swatch" style="background:#f5f1e8;">
+              <div>
+                <h3>Canvas</h3>
+                <div class="small">Warm background</div>
+              </div>
+              <code>#F5F1E8</code>
+            </div>
+            <div class="palette-card swatch" style="background:#fcfbf7;">
+              <div>
+                <h3>Surface</h3>
+                <div class="small">Main panels</div>
+              </div>
+              <code>#FCFBF7</code>
+            </div>
+            <div class="palette-card swatch" style="background:#c96b3b; color:#1f120b;">
+              <div>
+                <h3>Accent</h3>
+                <div class="small">Primary action</div>
+              </div>
+              <code>#C96B3B</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" style="margin-top: 14px;">
+          <div class="ui-grid">
+            <div class="ui-card">
+              <h3>Buttons</h3>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <span class="button primary">复制清洗结果</span>
+                <span class="button ghost">查看样例</span>
+              </div>
+            </div>
+            <div class="ui-card">
+              <h3>States</h3>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <span class="chip"><span class="dot"></span> 自动清洗中</span>
+                <span class="chip mono">已复制</span>
+              </div>
+            </div>
+            <div class="ui-card">
+              <h3>Form input tone</h3>
+              <div class="mock" style="margin-top: 10px;">
+                <div class="mock-body">
+                  <div style="padding:14px; border:1px solid var(--border); border-radius:14px; color:var(--text-faint);">
+                    在这里粘贴 AI 生成的正文...
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" style="margin-top: 14px;">
+          <div class="mock">
+            <div class="mock-top">
+              <strong>Product mockup</strong>
+              <span class="mono">portfolio-ready single page</span>
+            </div>
+            <div class="mock-body">
+              <div class="metric-row">
+                <div class="metric">
+                  <strong>20s</strong>
+                  <span class="small">Target first-use completion</span>
+                </div>
+                <div class="metric">
+                  <strong>80%</strong>
+                  <span class="small">Samples needing no manual cleanup</span>
+                </div>
+                <div class="metric">
+                  <strong>5+</strong>
+                  <span class="small">Repeat real users in first round</span>
+                </div>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Messy pattern</th>
+                    <th>Action</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Markdown heading markers</td>
+                    <td>Strip presentational residue</td>
+                    <td>Ready</td>
+                  </tr>
+                  <tr>
+                    <td>Abnormal Chinese spacing</td>
+                    <td>Normalize punctuation spacing</td>
+                    <td>Ready</td>
+                  </tr>
+                  <tr>
+                    <td>Repeated blank lines</td>
+                    <td>Collapse to natural paragraphs</td>
+                    <td>Ready</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div>All processing can stay local in the browser. No signup. No workflow friction.</div>
+        <div>Designed for a focused demo: useful first, memorable second.</div>
+      </footer>
+    </div>
+
+    <script>
+      const toggle = document.getElementById("themeToggle");
+      toggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+      });
+    </script>
+  </body>
+</html>
