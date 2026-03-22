@@ -3,10 +3,629 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Word Cleaner Demo</title>
-    <meta http-equiv="refresh" content="0; url=./design-preview.html" />
+    <title>AI Word Cleaner - AI 文本清洗工具，可直接复制进 Word</title>
+    <meta
+      name="description"
+      content="AI Word Cleaner 是一个 AI 文本清洗工具，可自动去掉 Markdown 痕迹、多余空格和空行，把 AI 生成的正文整理成更适合复制进 Word 的纯净文本。"
+    />
+    <meta
+      name="keywords"
+      content="AI文本清洗,Word文本清理,Markdown清理,AI论文正文,复制到Word,正文清洗工具"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#fafafa" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="AI Word Cleaner" />
+    <meta property="og:title" content="AI Word Cleaner - AI 文本清洗工具，可直接复制进 Word" />
+    <meta
+      property="og:description"
+      content="自动去掉 Markdown 痕迹、多余空格和空行，把 AI 生成的正文整理成更适合复制进 Word 的纯净文本。"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="AI Word Cleaner - AI 文本清洗工具，可直接复制进 Word" />
+    <meta
+      name="twitter:description"
+      content="自动去掉 Markdown 痕迹、多余空格和空行，把 AI 生成的正文整理成更适合复制进 Word 的纯净文本。"
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AI Word Cleaner",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Web",
+        "inLanguage": "zh-CN",
+        "description": "AI 文本清洗工具，可自动去掉 Markdown 痕迹、多余空格和空行，把 AI 生成的正文整理成更适合复制进 Word 的纯净文本。"
+      }
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg-color: #fafafa;
+        --surface-color: #ffffff;
+        --text-main: #111111;
+        --text-muted: #666666;
+        --text-faint: #cccccc;
+        --border-color: #e5e5e5;
+        --accent-color: #111111;
+        --radius: 6px;
+      }
+
+      body.dark {
+        color-scheme: dark;
+        --bg-color: #111111;
+        --surface-color: #1a1a1a;
+        --text-main: #f5f5f5;
+        --text-muted: #a0a0a0;
+        --text-faint: #666666;
+        --border-color: #2b2b2b;
+        --accent-color: #f5f5f5;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          "Helvetica Neue",
+          Arial,
+          "PingFang SC",
+          sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      textarea {
+        font: inherit;
+      }
+
+      .page {
+        flex: 1;
+        width: 100%;
+      }
+
+      .topbar {
+        padding: 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border-color);
+        background: var(--surface-color);
+        gap: 1rem;
+      }
+
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .brand-mark {
+        font-size: 1.125rem;
+        font-weight: 800;
+      }
+
+      .brand-text strong {
+        font-size: 1.125rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+
+      .brand-text span {
+        display: none;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .nav a {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+      }
+
+      .toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        border-radius: var(--radius);
+        cursor: pointer;
+        border: 1px solid var(--border-color);
+        background: transparent;
+        color: var(--text-main);
+        transition: background-color 0.15s ease;
+      }
+
+      .toggle:hover {
+        background: #f0f0f0;
+      }
+
+      body.dark .toggle:hover {
+        background: #222222;
+      }
+
+      .hero {
+        text-align: center;
+        padding: 5rem 2rem 4rem;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+        color: var(--text-main);
+      }
+
+      .hero-emphasis {
+        box-shadow: inset 0 -0.4em 0 0 #e5e5e5;
+      }
+
+      body.dark .hero-emphasis {
+        box-shadow: inset 0 -0.4em 0 0 #2b2b2b;
+      }
+
+      .hero p {
+        font-size: 1.05rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      .workspace-container {
+        flex: 1;
+        padding: 0 2rem 4rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .workspace {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        height: 60vh;
+        min-height: 560px;
+      }
+
+      .content-sections {
+        margin-top: 2rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+
+      .content-card {
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 1.25rem;
+      }
+
+      .content-card h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        letter-spacing: -0.02em;
+      }
+
+      .content-card p,
+      .content-card li {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+        line-height: 1.65;
+      }
+
+      .content-card ul,
+      .content-card ol {
+        padding-left: 1rem;
+      }
+
+      .content-card li + li {
+        margin-top: 0.4rem;
+      }
+
+      .content-wide {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .footer {
+        padding: 1.25rem 2rem 2rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        color: var(--text-muted);
+        font-size: 0.82rem;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .mobile-switch {
+        display: none;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .mobile-chip {
+        flex: 1;
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.6rem 0.8rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border-color);
+        background: transparent;
+        color: var(--text-muted);
+        cursor: pointer;
+      }
+
+      .mobile-chip.active {
+        background: var(--surface-color);
+        color: var(--text-main);
+      }
+
+      .panel {
+        background: var(--surface-color);
+        border-radius: var(--radius);
+        border: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transition: border-color 0.2s ease;
+        height: 100%;
+      }
+
+      .panel:focus-within {
+        border-color: #999999;
+      }
+
+      .panel-head {
+        padding: 0.75rem 1.25rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--bg-color);
+        gap: 0.75rem;
+      }
+
+      .panel-head strong {
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.15rem;
+      }
+
+      .panel-head span {
+        display: block;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .mono {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+      }
+
+      .panel-copy {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        border: 1px solid var(--border-color);
+        background: transparent;
+        color: var(--text-main);
+      }
+
+      .panel-copy:hover {
+        background: #f0f0f0;
+      }
+
+      body.dark .panel-copy:hover {
+        background: #222222;
+      }
+
+      .panel-copy.primary {
+        background: var(--accent-color);
+        color: var(--bg-color);
+        border-color: var(--accent-color);
+      }
+
+      .panel-copy.primary:hover {
+        background: #333333;
+        border-color: #333333;
+      }
+
+      body.dark .panel-copy.primary:hover {
+        background: #dddddd;
+        border-color: #dddddd;
+        color: #111111;
+      }
+
+      .panel-body {
+        flex: 1;
+        padding: 1.5rem;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        overflow: auto;
+      }
+
+      .input-box,
+      .output-box {
+        width: 100%;
+        height: 100%;
+        border: none;
+        resize: none;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--text-main);
+        background: transparent;
+        outline: none;
+        overflow: auto;
+      }
+
+      .input-box::placeholder {
+        color: var(--text-faint);
+      }
+
+      .output-box {
+        white-space: pre-wrap;
+      }
+
+      .empty-state {
+        color: var(--text-faint);
+      }
+
+      @media (max-width: 900px) {
+        .workspace {
+          grid-template-columns: 1fr;
+          height: auto;
+          min-height: 0;
+        }
+
+        .content-grid,
+        .content-wide {
+          grid-template-columns: 1fr;
+        }
+
+        .panel {
+          height: 400px;
+        }
+
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        .topbar {
+          padding: 1rem;
+        }
+
+        .topbar-left,
+        .footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .workspace-container {
+          padding: 0 1rem 2rem;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .mobile-switch {
+          display: flex;
+        }
+
+        .panel.input,
+        .panel.output {
+          display: none;
+        }
+
+        .panel.visible {
+          display: flex;
+        }
+      }
+    </style>
   </head>
   <body>
-    <p>Redirecting to <a href="./design-preview.html">AI Word Cleaner Demo</a>...</p>
+    <div class="page">
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="brand">
+            <div class="brand-mark">/</div>
+            <div class="brand-text">
+              <strong>AI Word Cleaner</strong>
+              <span>AI 文本清洗工具</span>
+            </div>
+          </div>
+          <nav class="nav" aria-label="主导航">
+            <a href="#top">首页</a>
+            <a href="#workspace">开始使用</a>
+            <a href="#guide">使用说明</a>
+          </nav>
+        </div>
+        <button class="toggle" id="themeToggle" type="button">切换深色</button>
+      </header>
+
+      <section class="hero">
+        <h1>一键清洗，<span class="hero-emphasis">直接贴进 Word</span></h1>
+        <p>粘贴 AI 生成的正文，自动去掉 Markdown 痕迹、多余空格和空行，输出适合继续放进 Word 的纯净文本。</p>
+      </section>
+
+      <section class="workspace-container">
+        <div class="mobile-switch" role="tablist" aria-label="移动端内容切换">
+          <button class="mobile-chip" id="showInput" type="button">原文</button>
+          <button class="mobile-chip active" id="showOutput" type="button">清洗后</button>
+        </div>
+
+        <div class="workspace">
+          <article class="panel input" id="inputPanel">
+            <div class="panel-head">
+              <div>
+                <strong>AI 原文</strong>
+              </div>
+              <div class="actions">
+                <button class="panel-copy" id="clearText" type="button">清空</button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <textarea
+                class="input-box"
+                id="inputText"
+                spellcheck="false"
+                placeholder="在这里粘贴 AI 生成的正文..."
+              >### 研究背景
+
+在当前 高校 写作 场景 中，越来越多 的 学生 会 使用 AI 生成 初稿。
+
+但是，直接复制 后 的 文本 常常 会 带有 多余 空格、空行 以及 Markdown 格式。
+
+- 这些问题 会 影响 Word 中 的 阅读 体验。
+- 也 会 增加 手动 清理 的 时间 成本。</textarea>
+            </div>
+          </article>
+
+          <article class="panel output visible" id="outputPanel">
+            <div class="panel-head">
+              <div>
+                <strong style="color: var(--text-main)">清洗结果</strong>
+              </div>
+              <div class="actions">
+                <span class="mono" id="charCount">已处理 0 字</span>
+                <button class="panel-copy primary" id="copyResult" type="button">复制到 Word</button>
+              </div>
+            </div>
+            <div class="panel-body output-box" id="outputText">
+              <div class="empty-state">净化后的纯文本将在这里生成，可直接复制到 Word。</div>
+            </div>
+          </article>
+        </div>
+
+        <div class="content-sections">
+          <div class="content-grid">
+            <section class="content-card" id="guide">
+              <h2>如何使用</h2>
+              <ol>
+                <li>把 AI 生成的正文粘贴到左侧输入框。</li>
+                <li>页面会自动清洗 Markdown、空格和空行问题。</li>
+                <li>在右侧复制结果，再粘贴进 Word 继续编辑。</li>
+              </ol>
+            </section>
+
+            <section class="content-card" id="scope">
+              <h2>适用范围</h2>
+              <ul>
+                <li>论文正文</li>
+                <li>开题报告正文</li>
+                <li>课程作业正文</li>
+                <li>AI 生成的提纲型正文草稿</li>
+              </ul>
+            </section>
+
+            <section class="content-card" id="limits">
+              <h2>当前不处理</h2>
+              <ul>
+                <li>封面和目录</li>
+                <li>参考文献专用格式</li>
+                <li>表格转 Word 表格</li>
+                <li>学校模板排版</li>
+              </ul>
+            </section>
+          </div>
+
+          <div class="content-wide">
+            <section class="content-card" id="faq">
+              <h2>常见问题</h2>
+              <ul>
+                <li>这个工具只处理正文清洗，不会直接生成学校模板。</li>
+                <li>如果原文本身结构混乱，清洗后仍建议在 Word 里做最后检查。</li>
+                <li>当前版本更适合连续正文，不适合复杂表格和参考文献。</li>
+              </ul>
+            </section>
+
+            <section class="content-card" id="seo-copy">
+              <h2>这个工具适合什么场景</h2>
+              <p>
+                如果你经常把 ChatGPT、Claude、Kimi 或其他 AI 工具生成的论文正文复制进 Word，
+                那么这类文本里的 Markdown 标题、异常空格和多余空行，通常都需要先清理一遍。
+                AI Word Cleaner 适合在正式排版之前，先把正文整理成更干净、可继续编辑的文本。
+              </p>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div><a href="mailto:h7451392@gmail.com">问题反馈</a></div>
+        <div class="footer-links">
+          <span>© 2026 AI Word Cleaner</span>
+          <a href="#top">返回顶部</a>
+        </div>
+      </footer>
+    </div>
+
+    <script type="module" src="./src/app.mjs"></script>
   </body>
 </html>

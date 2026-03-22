@@ -12,6 +12,7 @@ const showInput = document.getElementById("showInput");
 const showOutput = document.getElementById("showOutput");
 const inputPanel = document.getElementById("inputPanel");
 const outputPanel = document.getElementById("outputPanel");
+const defaultSample = sampleCases[0];
 
 function renderOutput() {
   const cleaned = cleanText(inputText.value);
@@ -19,7 +20,7 @@ function renderOutput() {
 
   if (!cleaned) {
     outputText.innerHTML =
-      '<div class="empty-state">在左侧粘贴文字后，这里会自动出现可复制到 Word 的结果。</div>';
+      '<div class="empty-state">粘贴文本后，这里会自动生成可复制到 Word 的结果。</div>';
     return;
   }
 
@@ -52,6 +53,7 @@ clearText.addEventListener("click", () => {
   inputText.value = "";
   copyResult.textContent = "复制结果";
   renderOutput();
+  inputText.focus();
 });
 
 copyResult.addEventListener("click", async () => {
@@ -80,6 +82,10 @@ sampleButtons.forEach((button) => {
 
 showInput.addEventListener("click", () => setMobileView("input"));
 showOutput.addEventListener("click", () => setMobileView("output"));
+
+if (!inputText.value.trim() && defaultSample) {
+  inputText.value = defaultSample.input;
+}
 
 renderOutput();
 setMobileView("output");
