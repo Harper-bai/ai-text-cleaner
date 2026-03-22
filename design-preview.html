@@ -14,7 +14,7 @@
       crossorigin
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -22,17 +22,17 @@
         color-scheme: light;
         --bg: #f5f1e8;
         --surface: #fcfbf7;
-        --surface-strong: #f1eadc;
-        --text: #1e1e1a;
-        --text-soft: #6f6a5f;
-        --text-faint: #a59a87;
-        --border: #d9d2c3;
-        --accent: #c96b3b;
-        --accent-strong: #b65f31;
+        --surface-strong: #f6f2e9;
+        --text: #1f1d18;
+        --text-soft: #686256;
+        --text-faint: #978c79;
+        --border: #ddd4c4;
+        --accent: #bb6a41;
+        --accent-strong: #aa5a34;
         --success: #7a9462;
         --secondary: #b8c4b0;
         --info: #6a7e95;
-        --shadow: 0 18px 40px rgba(48, 38, 24, 0.08);
+        --shadow: 0 10px 24px rgba(48, 38, 24, 0.05);
         --radius-sm: 6px;
         --radius-md: 10px;
         --radius-lg: 16px;
@@ -51,13 +51,13 @@
         color-scheme: dark;
         --bg: #1d1915;
         --surface: #26211c;
-        --surface-strong: #312920;
+        --surface-strong: #2d261f;
         --text: #f5f1e8;
-        --text-soft: #c4b8a6;
-        --text-faint: #8f8372;
-        --border: #473c31;
-        --accent: #c47b53;
-        --accent-strong: #d7926d;
+        --text-soft: #cbc0af;
+        --text-faint: #978a79;
+        --border: #4a4035;
+        --accent: #c07a56;
+        --accent-strong: #d08b68;
         --success: #8ea873;
         --secondary: #738268;
         --info: #91a4ba;
@@ -71,16 +71,7 @@
       body {
         margin: 0;
         font-family: "Instrument Sans", sans-serif;
-        background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 24%),
-          repeating-linear-gradient(
-            0deg,
-            transparent 0,
-            transparent 39px,
-            rgba(111, 106, 95, 0.04) 39px,
-            rgba(111, 106, 95, 0.04) 40px
-          ),
-          var(--bg);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.34), transparent 28%), var(--bg);
         color: var(--text);
         transition: background-color 180ms ease, color 180ms ease;
       }
@@ -98,7 +89,7 @@
       .page {
         width: min(1180px, calc(100vw - 40px));
         margin: 0 auto;
-        padding: 24px 0 72px;
+        padding: 20px 0 64px;
       }
 
       .topbar {
@@ -106,7 +97,7 @@
         justify-content: space-between;
         align-items: center;
         gap: 16px;
-        padding: 12px 0 20px;
+        padding: 10px 0 18px;
         border-bottom: 1px solid var(--border);
       }
 
@@ -126,7 +117,7 @@
         background: var(--surface);
         font-family: "IBM Plex Mono", monospace;
         font-size: 12px;
-        box-shadow: var(--shadow);
+        box-shadow: none;
       }
 
       .brand-text strong {
@@ -145,8 +136,8 @@
 
       .nav {
         display: flex;
-        gap: 20px;
-        font-size: 14px;
+        gap: 18px;
+        font-size: 13px;
       }
 
       .toggle {
@@ -158,45 +149,48 @@
         padding: 10px 16px;
         font: inherit;
         cursor: pointer;
+        box-shadow: none;
       }
 
       .hero {
         display: grid;
         grid-template-columns: 1.15fr 0.85fr;
-        gap: 32px;
+        gap: 28px;
         align-items: end;
-        padding: 40px 0 32px;
+        padding: 32px 0 24px;
       }
 
       .eyebrow {
         font-family: "IBM Plex Mono", monospace;
         font-size: 12px;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
-        margin-bottom: 14px;
+        letter-spacing: 0.06em;
+        margin-bottom: 12px;
       }
 
       h1 {
         margin: 0 0 18px;
-        font-family: "Fraunces", serif;
-        font-size: clamp(46px, 7vw, 72px);
-        line-height: 0.98;
-        letter-spacing: -0.03em;
-        max-width: 11ch;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: clamp(42px, 6vw, 64px);
+        font-weight: 800;
+        line-height: 1.02;
+        letter-spacing: -0.04em;
+        max-width: 10ch;
+        text-wrap: balance;
       }
 
       .lede {
         margin: 0 0 22px;
-        max-width: 36rem;
-        font-size: 18px;
-        line-height: 1.6;
+        max-width: 34rem;
+        font-size: 17px;
+        line-height: 1.58;
         color: var(--text-soft);
       }
 
       .hero-actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 10px;
       }
 
       .button {
@@ -206,7 +200,7 @@
         gap: 8px;
         min-height: 44px;
         padding: 12px 16px;
-        border-radius: 12px;
+        border-radius: 10px;
         border: 1px solid transparent;
         font-weight: 600;
       }
@@ -218,7 +212,7 @@
       .button.primary {
         background: var(--accent);
         color: #1f120b;
-        box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.08);
+        box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
       }
 
       .button.ghost {
@@ -231,23 +225,23 @@
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: var(--radius-xl);
-        padding: 20px;
+        padding: 18px;
         box-shadow: var(--shadow);
       }
 
       .split-card {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-top: 14px;
+        gap: 12px;
+        margin-top: 12px;
       }
 
       .mini-pane {
-        border-radius: 14px;
+        border-radius: 12px;
         border: 1px solid var(--border);
         background: var(--surface-strong);
-        padding: 14px;
-        min-height: 190px;
+        padding: 12px;
+        min-height: 176px;
       }
 
       .mini-pane strong,
@@ -272,30 +266,30 @@
       }
 
       .workspace {
-        margin-top: 12px;
+        margin-top: 8px;
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 28px;
-        padding: 20px;
+        border-radius: 24px;
+        padding: 18px;
         box-shadow: var(--shadow);
       }
 
       .process {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
         align-items: center;
-        margin-bottom: 16px;
+        margin-bottom: 14px;
       }
 
       .chip {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 8px 12px;
+        padding: 7px 11px;
         border-radius: 999px;
         border: 1px solid var(--border);
-        background: rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.52);
         font-size: 12px;
       }
 
@@ -309,19 +303,19 @@
       .panes {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 16px;
+        gap: 14px;
       }
 
       .panel {
         border: 1px solid var(--border);
-        border-radius: 20px;
+        border-radius: 18px;
         overflow: hidden;
         background: var(--surface-strong);
         min-height: 440px;
       }
 
       .panel.output {
-        background: linear-gradient(180deg, rgba(201, 107, 59, 0.08), transparent 42%), var(--surface);
+        background: linear-gradient(180deg, rgba(187, 106, 65, 0.06), transparent 42%), var(--surface);
       }
 
       .panel-head {
@@ -329,7 +323,7 @@
         justify-content: space-between;
         align-items: flex-start;
         gap: 12px;
-        padding: 18px 18px 14px;
+        padding: 16px 16px 12px;
         border-bottom: 1px solid var(--border);
       }
 
@@ -347,10 +341,12 @@
         background: var(--surface);
         font-size: 12px;
         font-family: "IBM Plex Mono", monospace;
+        box-shadow: none;
+        cursor: pointer;
       }
 
       .panel-body {
-        padding: 18px;
+        padding: 16px;
         font-size: 16px;
         line-height: 1.8;
       }
@@ -395,8 +391,8 @@
       .value-strip {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-        margin-top: 18px;
+        gap: 12px;
+        margin-top: 16px;
       }
 
       .value-card,
@@ -404,8 +400,8 @@
       .privacy-card {
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 18px;
+        border-radius: 16px;
+        padding: 16px;
       }
 
       .value-card h3,
@@ -417,40 +413,41 @@
       }
 
       .section {
-        margin-top: 24px;
+        margin-top: 20px;
       }
 
       .section-head {
         display: flex;
         justify-content: space-between;
-        gap: 16px;
+        gap: 12px;
         align-items: end;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
       }
 
       .section-title {
-        font-family: "Fraunces", serif;
-        font-size: 30px;
-        letter-spacing: -0.02em;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
       }
 
       .samples {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
+        gap: 12px;
       }
 
       .privacy-strip {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 14px;
+        gap: 12px;
       }
 
       .sample-actions {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        margin-top: 12px;
+        margin-top: 10px;
       }
 
       .sample-button {
@@ -471,10 +468,10 @@
       .mobile-switch {
         display: none;
         gap: 8px;
-        padding: 8px;
-        margin-bottom: 12px;
+        padding: 6px;
+        margin-bottom: 10px;
         border: 1px solid var(--border);
-        border-radius: 16px;
+        border-radius: 14px;
         background: var(--surface-strong);
       }
 
@@ -491,8 +488,11 @@
         align-items: center;
         justify-content: center;
         padding: 10px 12px;
-        border-radius: 12px;
+        border-radius: 10px;
         color: var(--text-soft);
+        border: 0;
+        background: transparent;
+        cursor: pointer;
       }
 
       .mobile-chip.active {
@@ -503,7 +503,7 @@
 
       .footer {
         margin-top: 28px;
-        padding-top: 18px;
+        padding-top: 16px;
         border-top: 1px solid var(--border);
         display: flex;
         justify-content: space-between;

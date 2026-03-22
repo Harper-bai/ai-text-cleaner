@@ -26,9 +26,9 @@
 - Color should support trust and readability first, personality second.
 
 ## Typography
-- **Display/Hero:** `Fraunces`
-  - Use for the hero headline and a few large editorial accents.
-  - Rationale: Gives the product a clear text-product identity and helps it stand apart from generic tool sites.
+- **Display/Hero:** `Plus Jakarta Sans`
+  - Use for the hero headline and major section titles.
+  - Rationale: Cleaner and fresher than the previous serif direction, while still feeling intentional and modern.
 - **Body:** `Instrument Sans`
   - Use for body copy, UI labels, helper text, and buttons.
   - Rationale: Clean and contemporary without feeling default or overused.
@@ -38,7 +38,7 @@
   - Use for counts, processing badges, small technical labels, and comparison metadata.
   - Rationale: Adds a quiet utility signal and supports tabular numerals.
 - **Code:** `IBM Plex Mono`
-- **Loading:** Google Fonts for `Fraunces`, `Instrument Sans`, and `IBM Plex Mono`.
+- **Loading:** Google Fonts for `Plus Jakarta Sans`, `Instrument Sans`, and `IBM Plex Mono`.
 
 ### Type Scale
 - `hero-xl`: 72px / 0.98 / -0.03em
@@ -158,9 +158,9 @@
 - Make the tool available immediately on the landing screen instead of hiding it below promotional content.
 
 ## Risks
-- Use `Fraunces` as the hero voice.
-  - Gain: Distinctive, text-native identity.
-  - Cost: Slightly less neutral than default sans-serif UI products.
+- Use `Plus Jakarta Sans` as the hero voice.
+  - Gain: Cleaner first impression and stronger clarity at a glance.
+  - Cost: Slightly less editorial personality than the earlier serif approach.
 - Use warm paper-like surfaces instead of pure white.
   - Gain: Stronger material feel, better portfolio presence.
   - Cost: Requires tighter contrast discipline.
