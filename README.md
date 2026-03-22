@@ -45,7 +45,7 @@
 可直接用任意静态服务器启动，例如：
 
 ```bash
-cd /Users/harper_by/Documents/Codex/ai-word-cleaner-demo
+cd ai-word-cleaner-demo
 python3 -m http.server 4173
 ```
 

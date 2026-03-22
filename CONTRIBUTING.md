@@ -24,7 +24,7 @@
 ### 启动一个本地静态服务
 
 ```bash
-cd /Users/harper_by/Documents/Codex/ai-word-cleaner-demo
+cd ai-word-cleaner-demo
 python3 -m http.server 4173
 ```
 
