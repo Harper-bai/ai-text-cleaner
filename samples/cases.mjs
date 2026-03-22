@@ -12,12 +12,12 @@ export const sampleCases = [
 - 也 会 增加 手动 清理 的 时间 成本。`,
     expected: `研究背景
 
-在当前 高校 写作 场景 中，越来越多 的 学生 会 使用 AI 生成 初稿。
+在当前高校写作场景中，越来越多的学生会使用 AI 生成初稿。
 
-但是，直接复制 后 的 文本 常常 会 带有 多余 空格、空行 以及 Markdown 格式。
+但是，直接复制后的文本常常会带有多余空格、空行以及 Markdown 格式。
 
-这些问题 会 影响 Word 中 的 阅读 体验。
-也 会 增加 手动 清理 的 时间 成本。`,
+这些问题会影响 Word 中的阅读体验。
+也会增加手动清理的时间成本。`,
   },
   {
     id: "mixed",
@@ -30,10 +30,10 @@ export const sampleCases = [
 2. 但 copy 到 Word 之后 ， 常常 会 出现 markdown residue 以及 中英文 之间 的 异常 空格 。`,
     expected: `User Behavior Analysis
 
-本文 主要 研究 AI writing tools 在 campus 场景中的 使用 情况。
+本文主要研究 AI writing tools 在 campus 场景中的使用情况。
 
 AI 可以 improve drafting efficiency .
-但 copy 到 Word 之后，常常 会 出现 markdown residue 以及 中英文 之间 的 异常 空格。`,
+但 copy 到 Word 之后，常常会出现 markdown residue 以及中英文之间的异常空格。`,
   },
   {
     id: "outline",

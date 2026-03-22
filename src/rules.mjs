@@ -8,6 +8,7 @@ export function normalizeWhitespace(text) {
 
 export function normalizeChineseSpacing(text) {
   return text
+    .replace(/([\u4e00-\u9fff])[ \t]+([\u4e00-\u9fff])/g, "$1$2")
     .replace(/([，。；：！？）】》])[ \t]+/g, "$1")
     .replace(/[ \t]+([，。；：！？）】》])/g, "$1")
     .replace(/([（【《])[ \t]+/g, "$1")
